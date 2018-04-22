@@ -52,4 +52,4 @@ class MysqlHandler():
         n = cursor.execute(sql)
         contentList = []
         for row in cursor.fetchall():
-            
+            pass
