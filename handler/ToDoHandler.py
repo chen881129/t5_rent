@@ -18,7 +18,7 @@ class TodoHandler(BaseHTTPRequestHandler):
  
     # Global instance to store todos. You should use a database in reality.
     #TODOS = MysqlHandler(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
-    list_json= '{"retcode":"5", "result":[{"id":1,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":2,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":3,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":4,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":5,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0}]}'.decode('gbk').encode('utf-8')
+    list_json= '[{"id":1,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0,"pic":"http://pic1.58cdn.com.cn/anjuke_58/92c2d0cf7e65d888729c3b2fb664df76?w=640&h=480&crop=1"},{"id":2,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/14d4f6e0a12cc24f93afb6bd41f95318?w=640&h=480&crop=1"},{"id":3,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/16a4846a6fddfe2aebfee5dcb789e7d2?w=640&h=480&crop=1"},{"id":4,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/1c5ce20ab5720a69c47549a0f2f1e3fa?w=640&h=480&crop=1"},{"id":5,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0,"pic":"http://pic2.58cdn.com.cn/anjuke_58/f34ec6e33a2e7593edfa35782505602b?w=640&h=480&crop=1"}]'.decode('gbk').encode('utf-8')
     jieba.initialize()
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
@@ -30,10 +30,11 @@ class TodoHandler(BaseHTTPRequestHandler):
  
         # Just dump data to json, and return it
         pos = self.path.find("?")
-        if (pos != -1):
+        if (True):
             operation = self.path[0:pos]
             param = self.path[pos+1:len(self.path)]
-            if operation == "/t5_rent/house_list":
+            print "ok"
+            if True:
                 #message = simplejson.dumps(self.list_json)
      
                 self.send_response(200)
