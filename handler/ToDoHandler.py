@@ -18,7 +18,7 @@ class TodoHandler(BaseHTTPRequestHandler):
  
     # Global instance to store todos. You should use a database in reality.
     #TODOS = MysqlHandler(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
-    list_json= u'{"retcode":5,[{"id":1,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":2,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":3,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":4,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":5,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0}]}'
+    list_json= '{"retcode":"5", "result":[{"id":1,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":2,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":3,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":4,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0},{"id":5,  "title":"大钟寺大柳树皂君庙东里单间2500元农科院铁科院交通大学财经大学", "subdistrict":"皂君东里","faceto":"北","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"中装修","area":84.0}]}'.decode('gbk').encode('utf-8')
     jieba.initialize()
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
@@ -33,18 +33,18 @@ class TodoHandler(BaseHTTPRequestHandler):
         if (pos != -1):
             operation = self.path[0:pos]
             param = self.path[pos+1:len(self.path)]
-            if operation == "/house_list":
-                message = simplejson.dumps(self.list_json)
+            if operation == "/t5_rent/house_list":
+                #message = simplejson.dumps(self.list_json)
      
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
-                self.wfile.write(message)
+                self.wfile.write(self.list_json)
                 return
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(simplejson.dumps('{"retcode":-1,[]}'))
+        self.wfile.write('{"retcode":-1,"result":[]}')
  
     def do_POST(self):
         """Add a new todo
