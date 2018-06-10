@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-#coding=gbk
+#coding=utf-8
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 import MySQLdb
@@ -15,10 +15,10 @@ class TodoHandler(BaseHTTPRequestHandler):
  
     which can display and manage todos for you.
     """
- 
+    list_json = '{"retcode":5,"result":[{"id":1,  "title":"å¤§é’Ÿå¯ºå¤§æŸ³æ ‘çš‚å›åº™ä¸œé‡Œå•é—´2500å…ƒå†œç§‘é™¢é“ç§‘é™¢äº¤é€šå¤§å­¦è´¢ç»å¤§å­¦", "subdistrict":"çš‚å›ä¸œé‡Œ","faceto":"åŒ—","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ä¸­è£…ä¿®","area":84.0,"pic":"http://pic1.58cdn.com.cn/anjuke_58/92c2d0cf7e65d888729c3b2fb664df76?w=640&h=480&crop=1"},{"id":2,  "title":"å¤§é’Ÿå¯ºå¤§æŸ³æ ‘çš‚å›åº™ä¸œé‡Œå•é—´2500å…ƒå†œç§‘é™¢é“ç§‘é™¢äº¤é€šå¤§å­¦è´¢ç»å¤§å­¦", "subdistrict":"çš‚å›ä¸œé‡Œ","faceto":"åŒ—","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ä¸­è£…ä¿®","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/14d4f6e0a12cc24f93afb6bd41f95318?w=640&h=480&crop=1"},{"id":3,  "title":"å¤§é’Ÿå¯ºå¤§æŸ³æ ‘çš‚å›åº™ä¸œé‡Œå•é—´2500å…ƒå†œç§‘é™¢é“ç§‘é™¢äº¤é€šå¤§å­¦è´¢ç»å¤§å­¦", "subdistrict":"çš‚å›ä¸œé‡Œ","faceto":"åŒ—","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ä¸­è£…ä¿®","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/16a4846a6fddfe2aebfee5dcb789e7d2?w=640&h=480&crop=1"},{"id":4,  "title":"å¤§é’Ÿå¯ºå¤§æŸ³æ ‘çš‚å›åº™ä¸œé‡Œå•é—´2500å…ƒå†œç§‘é™¢é“ç§‘é™¢äº¤é€šå¤§å­¦è´¢ç»å¤§å­¦", "subdistrict":"çš‚å›ä¸œé‡Œ","faceto":"åŒ—","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ä¸­è£…ä¿®","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/1c5ce20ab5720a69c47549a0f2f1e3fa?w=640&h=480&crop=1"},{"id":5,  "title":"å¤§é’Ÿå¯ºå¤§æŸ³æ ‘çš‚å›åº™ä¸œé‡Œå•é—´2500å…ƒå†œç§‘é™¢é“ç§‘é™¢äº¤é€šå¤§å­¦è´¢ç»å¤§å­¦", "subdistrict":"çš‚å›ä¸œé‡Œ","faceto":"åŒ—","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ä¸­è£…ä¿®","area":84.0,"pic":"http://pic2.58cdn.com.cn/anjuke_58/f34ec6e33a2e7593edfa35782505602b?w=640&h=480&crop=1"}]}'
+    detail_json = '{"id":1,  "title":"å¤§é’Ÿå¯ºå¤§æŸ³æ ‘çš‚å›åº™ä¸œé‡Œå•é—´2500å…ƒå†œç§‘é™¢é“ç§‘é™¢äº¤é€šå¤§å­¦è´¢ç»å¤§å­¦", "subdistrict":"çš‚å›ä¸œé‡Œ","faceto":"åŒ—","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ä¸­è£…ä¿®","area":84.0,"pic":"http://pic1.58cdn.com.cn/anjuke_58/92c2d0cf7e65d888729c3b2fb664df76?w=640&h=480&crop=1","room":[{"area":14.6, "faceto":"åŒ—", "tenent":{"college":"åŒ—äº¬äº¤é€šå¤§å­¦", "age": 28, "sex":"ç”·"}, "price": 1400.00},{"area":13.6, "faceto":"åŒ—", "tenent":{"college":"åŒ—äº¬ç§‘æŠ€å¤§å­¦", "age": 27, "sex":"ç”·"}, "price": 1300.00},{"area":11.6, "faceto":"åŒ—", "tenent":{"college":"åŒ—äº¬èˆªç©ºèˆªå¤©å¤§å­¦", "age": 28, "sex":"ç”·"}, "price": 1200.00}]}'
     # Global instance to store todos. You should use a database in reality.
     #TODOS = MysqlHandler(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
-    list_json= '[{"id":1,  "title":"´óÖÓËÂ´óÁøÊ÷Ôí¾ıÃí¶«Àïµ¥¼ä2500ÔªÅ©¿ÆÔºÌú¿ÆÔº½»Í¨´óÑ§²Æ¾­´óÑ§", "subdistrict":"Ôí¾ı¶«Àï","faceto":"±±","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ÖĞ×°ĞŞ","area":84.0,"pic":"http://pic1.58cdn.com.cn/anjuke_58/92c2d0cf7e65d888729c3b2fb664df76?w=640&h=480&crop=1"},{"id":2,  "title":"´óÖÓËÂ´óÁøÊ÷Ôí¾ıÃí¶«Àïµ¥¼ä2500ÔªÅ©¿ÆÔºÌú¿ÆÔº½»Í¨´óÑ§²Æ¾­´óÑ§", "subdistrict":"Ôí¾ı¶«Àï","faceto":"±±","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ÖĞ×°ĞŞ","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/14d4f6e0a12cc24f93afb6bd41f95318?w=640&h=480&crop=1"},{"id":3,  "title":"´óÖÓËÂ´óÁøÊ÷Ôí¾ıÃí¶«Àïµ¥¼ä2500ÔªÅ©¿ÆÔºÌú¿ÆÔº½»Í¨´óÑ§²Æ¾­´óÑ§", "subdistrict":"Ôí¾ı¶«Àï","faceto":"±±","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ÖĞ×°ĞŞ","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/16a4846a6fddfe2aebfee5dcb789e7d2?w=640&h=480&crop=1"},{"id":4,  "title":"´óÖÓËÂ´óÁøÊ÷Ôí¾ıÃí¶«Àïµ¥¼ä2500ÔªÅ©¿ÆÔºÌú¿ÆÔº½»Í¨´óÑ§²Æ¾­´óÑ§", "subdistrict":"Ôí¾ı¶«Àï","faceto":"±±","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ÖĞ×°ĞŞ","area":84.0,"pic":"http://pic3.58cdn.com.cn/anjuke_58/1c5ce20ab5720a69c47549a0f2f1e3fa?w=640&h=480&crop=1"},{"id":5,  "title":"´óÖÓËÂ´óÁøÊ÷Ôí¾ıÃí¶«Àïµ¥¼ä2500ÔªÅ©¿ÆÔºÌú¿ÆÔº½»Í¨´óÑ§²Æ¾­´óÑ§", "subdistrict":"Ôí¾ı¶«Àï","faceto":"±±","floor":3,"year":1999,"dinner_num":1,"room_num":3,"fitment":"ÖĞ×°ĞŞ","area":84.0,"pic":"http://pic2.58cdn.com.cn/anjuke_58/f34ec6e33a2e7593edfa35782505602b?w=640&h=480&crop=1"}]'.decode('gbk').encode('utf-8')
     jieba.initialize()
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
@@ -34,13 +34,19 @@ class TodoHandler(BaseHTTPRequestHandler):
             operation = self.path[0:pos]
             param = self.path[pos+1:len(self.path)]
             print "ok"
-            if True:
+            if self.path.find('house_list') != -1:
                 #message = simplejson.dumps(self.list_json)
      
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
                 self.wfile.write(self.list_json)
+                return
+            elif self.path.find('house_detail') != -1:
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(self.detail_json)
                 return
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
