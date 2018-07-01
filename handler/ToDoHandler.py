@@ -2,13 +2,17 @@
 #coding=utf-8
 
 from BaseHTTPServer import BaseHTTPRequestHandler
+from urllib import unquote
 import MySQLdb
 from handler.MysqlHandler import MysqlHandler
-
+from data_unit.House import House
 import simplejson
 import cgi
 import jieba
+import redis
 from conf import *
+
+NO_RESULT = 'no result'
 
 class TodoHandler(BaseHTTPRequestHandler):
     """A simple TODO server
@@ -20,38 +24,61 @@ class TodoHandler(BaseHTTPRequestHandler):
     # Global instance to store todos. You should use a database in reality.
     #TODOS = MysqlHandler(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
     jieba.initialize()
+    mysqlHandler = MysqlHandler('localhost', 'root', 'Aqaz123!', 't5_rent')
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
-        self.mysqlHandler = []
  
+    def send_res(self, result):
+        final_result = '{"retcode":-1,"result":[]}';
+        if (result != NO_RESULT):
+            final_result = result
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(final_result)
+
     def do_GET(self):
         # return all todos
  
  
         # Just dump data to json, and return it
         pos = self.path.find("?")
-        if (True):
+        if (pos != -1):
             operation = self.path[0:pos]
-            param = self.path[pos+1:len(self.path)]
-            print "ok"
-            if self.path.find('house_list') != -1:
-                #message = simplejson.dumps(self.list_json)
-     
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(self.list_json)
+            params = self.path[pos+1:len(self.path)].split('&')
+            if len(params) < 1:
+                self.send_error(NO_RESULT)
                 return
-            elif self.path.find('house_detail') != -1:
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(self.detail_json)
+            if operation.find('house_list') != -1:
+                result_list = []
+                for param in params:
+                    param_vec = param.split('=')
+                    key = param_vec[0]
+                    value = param_vec[1]
+                    if (key == "query"):
+                        seg_list = jieba.cut_for_search(unquote(value), HMM=False)
+                        doclist = self.mysqlHandler.GetDocIdList(seg_list)
+                        ret_dic = []
+                        for doc in doclist:
+                            print doc
+                        docs = self.mysqlHandler.GetContent(doclist)
+                        for doc in docs:
+                            (id, title, subdistrict, faceto, floor, year, dinner_num, room_num, fitment, area, pic) = doc
+                            house = House(id, title, subdistrict, faceto, floor, year, dinner_num, room_num, fitment, area, "", "", pic)
+                            house_dic = house.to_dict()
+                            result_list.append(house_dic)
+                final_result = {'retcode':len(result_list), 'result': result_list}
+                json_result = simplejson.dumps(final_result)
+                print json_result
+                #send_str = str(simplejson.loads(json_result)).decode('utf8').encode('raw_unicode_escape')
+                #print send_str
+                self.send_res(json_result)
                 return
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write('{"retcode":-1,"result":[]}')
+            elif operation.find('house_detail') != -1:
+                seld.send_res(self.detail_json)
+                return
+        send_error()
+        return
  
     def do_POST(self):
         """Add a new todo
