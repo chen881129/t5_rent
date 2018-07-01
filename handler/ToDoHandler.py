@@ -10,6 +10,8 @@ import simplejson
 import cgi
 import jieba
 import redis
+import time
+import datetime
 from conf import *
 
 NO_RESULT = 'no result'
@@ -45,10 +47,13 @@ class TodoHandler(BaseHTTPRequestHandler):
         # Just dump data to json, and return it
         pos = self.path.find("?")
         if (pos != -1):
+            t1 = int(time.time()*1000)
             operation = self.path[0:pos]
             params = self.path[pos+1:len(self.path)].split('&')
             if len(params) < 1:
                 self.send_error(NO_RESULT)
+                t2 = int(time.time()*1000)
+                print "[%s] cost=%d,ret=%d" % ((datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), t2 - t1, 0)
                 return
             if operation.find('house_list') != -1:
                 result_list = []
@@ -70,10 +75,12 @@ class TodoHandler(BaseHTTPRequestHandler):
                             result_list.append(house_dic)
                 final_result = {'retcode':len(result_list), 'result': result_list}
                 json_result = simplejson.dumps(final_result)
-                print json_result
+                #print json_result
                 #send_str = str(simplejson.loads(json_result)).decode('utf8').encode('raw_unicode_escape')
                 #print send_str
                 self.send_res(json_result)
+                t2 = int(time.time()*1000)
+                print "[%s] cost=%d,ret=%d" % ((datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), t2 - t1, 0)
                 return
             elif operation.find('house_detail') != -1:
                 seld.send_res(self.detail_json)
