@@ -4,7 +4,7 @@ function wait_port()
 {
     port=$1
     pid=$2
-    while 1
+    while [[ 0 ]]
     do
         ps -p $pid
         if [[ $? -ne 0 ]];then
