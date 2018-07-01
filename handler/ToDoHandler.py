@@ -24,7 +24,8 @@ class TodoHandler(BaseHTTPRequestHandler):
     # Global instance to store todos. You should use a database in reality.
     #TODOS = MysqlHandler(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
     jieba.initialize()
-    mysqlHandler = MysqlHandler('localhost', 'root', 'Aqaz123!', 't5_rent')
+    #mysqlHandler = MysqlHandler('localhost', 'root', 'Aqaz123!', 't5_rent')
+    mysqlHandler = MysqlHandler(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
  
