@@ -10,7 +10,7 @@ from conf import *
 
 def make_app():
     return tornado.web.Application([
-        (r"/t5_rent_dev/.*", ProcessHandler),
+        (r"/t5_rent.*", ProcessHandler),
     ])
 
 def main():
