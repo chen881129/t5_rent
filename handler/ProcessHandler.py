@@ -15,6 +15,8 @@ import redis
 import time
 import datetime
 from conf import *
+import jwt
+import Crypto.PublicKey.RSA as RSA, datetime
 
 NO_RESULT = 'no result'
 
@@ -28,6 +30,11 @@ class ProcessHandler(tornado.web.RequestHandler):
     with open('/root/product/t5_rent/room_data') as fd:
         txt = fd.read().replace('\n','')
         detail_json = txt.decode('gbk').encode('utf-8')
+    key = RSA.generate(2048)
+    priv_pem = key.exportKey()
+    pub_pem = key.publickey().exportKey()
+    priv_key = RSA.importKey(priv_pem)
+    pub_key = RSA.importKey(pub_pem)
  
     def send_res(self, result):
         final_result = '{"retcode":-1,"result":[]}';
@@ -35,12 +42,34 @@ class ProcessHandler(tornado.web.RequestHandler):
             final_result = result
         self.write(final_result)
 
+    def check_user(self, claims):
+        return True
+
     def get(self):
         # return all todos
  
  
         # Just dump data to json, and return it
         operation = self.request.uri
+        try:
+            token = self.get_argument('token')
+        except:
+            payload = { 'site': 'zhiliaohou.online', 'name': 'litong'}
+            token = jwt.generate_jwt(payload, self.priv_key, 'RS256', datetime.timedelta(minutes=5))
+            self.send_res('{"token":"%s"}' % token)
+            return
+        if (token == None or token == ""):
+            self.send_res(NO_RESULT)
+            return 
+        else:
+            try:
+                header, claims = jwt.verify_jwt(token, self.pub_key, ['RS256'])
+            except:
+                self.send_res(NO_RESULT)
+                return
+            if (self.check_user(claims) is False):
+                self.send_res(NO_RESULT)
+                return
 
         t1 = int(time.time()*1000)
         if operation.find('house_list') != -1:
