@@ -14,12 +14,20 @@ class MysqlHandler():
         docList = []
         cursor = self.conn.cursor()
         print termList
+        needCache = True
+        if (termList == None):
+            sql = "SELECT id FROM house"
+            docList = []
+            n = cursor.execute(sql)
+            for row in cursor.fetchall():
+                docList.append(row[0])
+            return docList
         for term in termList:
             docInRedis = self.redisHandler.smembers(term)
             docListTerm = []
             if len(docInRedis) is 0:
                 sql = "SELECT id FROM house WHERE title like '%%%s%%'" % term
-                print sql
+                #print sql
                 n = cursor.execute(sql)
                 for row in cursor.fetchall():
                     docListTerm.append(row[0])

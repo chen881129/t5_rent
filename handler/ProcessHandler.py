@@ -51,6 +51,7 @@ class ProcessHandler(tornado.web.RequestHandler):
  
         # Just dump data to json, and return it
         operation = self.request.uri
+        '''
         try:
             token = self.get_argument('token')
         except:
@@ -70,17 +71,18 @@ class ProcessHandler(tornado.web.RequestHandler):
             if (self.check_user(claims) is False):
                 self.send_res(NO_RESULT)
                 return
-
+        '''
         t1 = int(time.time()*1000)
         if operation.find('house_list') != -1:
             result_list = []
-            queryString = self.get_argument('query')
-            if (queryString == None or queryString == ""):
-                self.send_error(NO_RESULT)
-                t2 = int(time.time()*1000)
-                print "[%s] cost=%d,ret=%d" % ((datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), t2 - t1, 0)
-                return
-            seg_list = jieba.cut_for_search(unquote(queryString), HMM=False)
+            try:
+                queryString = self.get_argument('query')
+                print queryString
+                seg_list = jieba.cut_for_search(unquote(queryString), HMM=False)
+                print seg_list
+            except:
+                seg_list = None
+            print seg_list
             doclist = self.mysqlHandler.GetDocIdList(seg_list)
             ret_dic = []
             for doc in doclist:
@@ -101,7 +103,7 @@ class ProcessHandler(tornado.web.RequestHandler):
             print "[%s] cost=%d,ret=%d" % ((datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), t2 - t1, len(result_list))
             return
         elif operation.find('house_detail') != -1:
-            seld.send_res(self.detail_json)
+            self.send_res(self.detail_json)
             t2 = int(time.time()*1000)
             print "[%s] cost=%d,ret=%d" % ((datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), t2 - t1, 0)
             return
